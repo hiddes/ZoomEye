@@ -17,3 +17,7 @@ LOGIN_DATA = {
 }
 
 HEADERS = {}
+
+HOST_QUERY_KEYS = ['app', 'device', 'service', 'os', 'port', 'country', 'city']
+WEB_QUERY_KEYS = ['webapp', 'component', 'framework', 'frontend', 'server', 'waf', 'os', 'country', 'city']
+RESULT_KEYS = ['matches', 'facets', 'total']
