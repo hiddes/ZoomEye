@@ -8,9 +8,12 @@ ERROR_LIST = ['error']
 
 
 def check_error(req):
-    if req.status_code != '200':
+    if req.status_code != 200:
         print(req.status_code)
-        json_data = req.json()
+        try:
+            json_data = req.json()
+        except:
+            json_data = dict()
         if json_data.has_key('error'):
             error = json_data.get('error')
             message = json_data.get('message')
