@@ -3,8 +3,6 @@
 # Create:
 
 # 登录url
-import os
-
 ZOOM_EYE_API_URL = 'https://api.zoomeye.org'
 LOGIN_URL = '/'.join((ZOOM_EYE_API_URL, 'user', 'login'))
 HOST_SEARCH_URL = '/'.join((ZOOM_EYE_API_URL, 'host', 'search'))
