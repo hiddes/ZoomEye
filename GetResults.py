@@ -3,11 +3,22 @@
 # Create:
 from Functions import get
 from Databases import ResultDB
-from Config import HOST_QUERY_KEYS, WEB_QUERY_KEYS, RESULT_KEYS, HOST_SEARCH_URL, WEB_SEARCH_URL
+from Config import HOST_QUERY_KEYS, WEB_QUERY_KEYS, HOST_SEARCH_URL, WEB_SEARCH_URL
 
 
 class ZoomEyeDB(object):
+    """
+    访问数据库的描述符
+    """
+
     def __get__(self, instance, owner):
+        """
+        获取数据
+        :param instance:
+        :param owner:
+        :return:
+        """
+        # 'open_db' 用于判断是否要使用数据库
         if instance.__dict__.get('open_db') is True:
             if not hasattr(self, 'db'):
                 self.db = ResultDB()
@@ -15,6 +26,12 @@ class ZoomEyeDB(object):
             return result
 
     def __set__(self, instance, value):
+        """
+        保存数据
+        :param instance:
+        :param value:
+        :return:
+        """
         if instance.__dict__.get('open_db') is True:
             if not hasattr(self, 'db'):
                 self.db = ResultDB()
@@ -23,7 +40,7 @@ class ZoomEyeDB(object):
 
 
 class BaseRequest(dict):
-    db = ZoomEyeDB()
+    db = ZoomEyeDB()  # 保存数据
 
     def __init__(self, *args, **kwargs):
         super(BaseRequest, self).__init__(*args, **kwargs)
@@ -31,6 +48,7 @@ class BaseRequest(dict):
         self.url = ''
         self.facets = ''
         self.header = {}
+        # 仅用于描述符
         self.open_db = True
         self.keys_worlds = set(HOST_QUERY_KEYS + WEB_QUERY_KEYS)
 
@@ -58,11 +76,17 @@ class BaseRequest(dict):
             self.set_attr(k, kwargs)
 
     def send_request(self):
+        """
+        构造请求的数据，并发送
+        :return:
+        """
         if not self.url or not self.header:
             raise Exception('Please use HostRequest or WebRequest')
         query = ' '.join('%s:%s' % (k, v) for k, v in self.__dict__.iteritems() if k in self.keys_worlds)
+        # 查询数据
         if not query:
             raise Exception('Not request')
+        # 统计结果
         if self.facets:
             url = '&'.join(('query=%s' % query, 'page=%s' % self.page, 'facets=%s' % self.facets))
         else:
@@ -95,7 +119,7 @@ def main():
     bq.url = 'http://baidu.com'
     bq.app = 'tgest'
     bq.send_request()
-    print len(bq)
+    print(len(bq))
 
 
 if __name__ == '__main__':
